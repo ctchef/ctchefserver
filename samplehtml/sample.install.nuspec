@@ -9,7 +9,7 @@
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>Sample</description>
         <summary>Sample</summary>
-        <projectUrl></projectUrl>
+        <projectUrl>https://github.com/ctchef/ctchefserver.git</projectUrl>
         <copyright>Copyright 2017 - CitiusTech.</copyright>
         <dependencies/>
     </metadata>
@@ -17,9 +17,9 @@
         <!-- Installer files -->
         <file src="install.ps1" target="tools"/>
         <file src="install.proj" target="tools"/>
-        <file src="..\..\packages\MSBuild.Extension.Pack\lib\net40\MSBuild.ExtensionPack.Iis7.dll" target="tools"/>
-        <file src="..\..\packages\MSBuild.Extension.Pack\lib\net40\MSBuild.ExtensionPack.dll" target="tools"/>
-        <file src="..\..\packages\MSBuild.Extension.Pack\lib\net40\Ionic.Zip.dll" target="tools"/>
+        <file src="packages\MSBuild.Extension.Pack\lib\net40\MSBuild.ExtensionPack.Iis7.dll" target="tools"/>
+        <file src="packages\MSBuild.Extension.Pack\lib\net40\MSBuild.ExtensionPack.dll" target="tools"/>
+        <!--<file src="..\..\packages\MSBuild.Extension.Pack\lib\net40\Ionic.Zip.dll" target="tools"/>-->
         <!-- required by the previous file -->
         <!-- Content/distribution files -->
         <file src="helloworld.html" target="content"/>
