@@ -4,8 +4,8 @@
         <id>Sample.Install</id>
         <title>Sample Install</title>
         <version>0.0.0.0</version>
-        <authors>NaviNet</authors>
-        <owners>NaviNet</owners>
+        <authors>emile</authors>
+        <owners>emile</owners>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>Sample</description>
         <summary>Sample</summary>
@@ -17,11 +17,11 @@
         <!-- Installer files -->
         <file src="install.ps1" target="tools"/>
         <file src="install.proj" target="tools"/>
-        <file src="shared.targets" target="tools"/>
         <file src="..\..\packages\MSBuild.Extension.Pack\lib\net40\MSBuild.ExtensionPack.Iis7.dll" target="tools"/>
         <file src="..\..\packages\MSBuild.Extension.Pack\lib\net40\MSBuild.ExtensionPack.dll" target="tools"/>
         <file src="..\..\packages\MSBuild.Extension.Pack\lib\net40\Ionic.Zip.dll" target="tools"/>
         <!-- required by the previous file -->
         <!-- Content/distribution files -->
         <file src="helloworld.html" target="content"/>
+    </files>
 </package>
