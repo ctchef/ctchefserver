@@ -1,0 +1,67 @@
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="All">
+    <UsingTask TaskName="MSBuild.ExtensionPack.Web.Iis7Website" 
+    AssemblyFile="$(MSBuildProjectDirectory)\MSBuild.ExtensionPack.Iis7.dll" />
+    <UsingTask TaskName="MSBuild.ExtensionPack.Web.Iis7AppPool" 
+    AssemblyFile="$(MSBuildProjectDirectory)\MSBuild.ExtensionPack.Iis7.dll" />
+    <UsingTask TaskName="MSBuild.ExtensionPack.FileSystem.File" 
+    AssemblyFile="$(MSBuildProjectDirectory)\MSBuild.ExtensionPack.dll" />
+    <UsingTask TaskName="MSBuild.ExtensionPack.FileSystem.Folder" 
+    AssemblyFile="$(MSBuildProjectDirectory)\MSBuild.ExtensionPack.dll" />
+    <UsingTask TaskName="NaviNet.MSBuild.Tasks.Couchbase.PushCouchbaseFiles" 
+    AssemblyFile="$(MSBuildProjectDirectory)\NaviNet.MSBuild.Tasks.dll" />
+	<UsingTask TaskName="MSBuild.ExtensionPack.Xml.XmlFile" 
+    AssemblyFile="$(MSBuildProjectDirectory)\..\tools\MSBuild.ExtensionPack.dll" />
+    
+    <PropertyGroup>
+        <WebsiteName>Dynamic</WebsiteName>		
+        <IISBin>$(windir)\system32\inetsrv</IISBin>
+        <AppCmdExe>$(IISBin)\APPCMD.EXE</AppCmdExe>
+        <PackageRootDirPath>$(MSBuildProjectDirectory)\..</PackageRootDirPath>
+    </PropertyGroup>
+    
+    <Target Name="All">
+        <CallTarget Targets="Dynamic" />
+    </Target>
+    
+    <Target Name="Dynamic">
+        <ItemGroup>
+            <VirtualDirectory Include="/ctwebapps">
+                <ApplicationPath>/</ApplicationPath>
+                <PhysicalPath>$(SystemDrive)\inetpub\wwwroot\api</PhysicalPath>
+            </VirtualDirectory>
+            <Application Include="/ctwebapps/samplehtml">
+                <PhysicalPath>$(TargetDirectory_Dynamic)</PhysicalPath>
+                <AppPool>$(DynamicAppPoolName)</AppPool>
+            </Application>
+        </ItemGroup>
+        
+        <CallTarget Targets="PreInstall" />
+
+	<Copy SourceFiles="@(BinFiles)" OverwriteReadOnlyFiles="True" DestinationFolder="$(TargetDirectory_Dynamic)\" />
+        
+        <!-- Create web app -->
+        <MSBuild.ExtensionPack.Web.Iis7Website Name="$(WebsiteName)" TaskAction="AddVirtualDirectory" 
+        VirtualDirectories="@(VirtualDirectory)" Force="true" />
+        <MSBuild.ExtensionPack.Web.Iis7Website Name="$(WebsiteName)" TaskAction="AddApplication" 
+        Applications="@(Application)" Force="true" />
+        <!-- Set IIS app auto-start -->
+        <CallTarget Targets="SetIisAppAutoStart" />
+        <CallTarget Targets="PostInstall" />
+    </Target>
+    
+    <Target Name="PreInstall">
+        <Exec Command="IISRESET /STOP" />
+    </Target>
+    <Target Name="PostInstall">
+        <Exec Command="IISRESET /START" />
+    </Target>
+    <Target Name="SetIisAppAutoStart">
+        <PropertyGroup>
+            <AutoStart Condition="$(AutoStart) == ''">false</AutoStart>
+        </PropertyGroup>
+        <Exec Condition="$(AutoStart) == 'true'" 
+        Command="$(AppCmdExe) set app /app.name:&quot;$(WebsiteName)/$(WebAppName)&quot; /preloadEnabled:true" 
+        WorkingDirectory="$(IISBin)" />
+    </Target>
+    
+ </Project>
