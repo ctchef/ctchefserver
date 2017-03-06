@@ -7,4 +7,4 @@ if(!(Test-Path $msbuildExe))
     exit 1
 }
 
-&$msbuildExe install.proj /target:"Dynamic"
+&$msbuildExe $InstallDirectory\install.proj /target:"Dynamic" /filelogger /fileloggerparameters:"LogFile=$LogDirectory\install.log"
