@@ -3,7 +3,7 @@
     <metadata>
         <id>Sample.Install</id>
         <title>Sample Install</title>
-        <version>0.0.0.0</version>
+        <version>1.0</version>
         <authors>emile</authors>
         <owners>emile</owners>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
