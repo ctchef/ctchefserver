@@ -1,6 +1,6 @@
 param
 (
-    [String]$LogDirectory="C:\temp\Sample.Install",
+    [String]$LogDirectory="C:\temp\Sample.Install.1.0.0",
     [String]$AdditionalArgs="",
     [String]$Targets=""
 )
@@ -13,4 +13,4 @@ if(!(Test-Path $msbuildExe))
     exit 1
 }
 
-&$msbuildExe C:\temp\Sample.Install\tools\install.proj /target:"Dynamic" /filelogger /fileloggerparameters:"LogFile=$LogDirectory\install.log"
+&$msbuildExe C:\temp\Sample.Install.1.0.0\tools\install.proj /target:"Dynamic" /filelogger /fileloggerparameters:"LogFile=$LogDirectory\install.log"
