@@ -1,3 +1,9 @@
+param
+(
+    [String]$LogDirectory="C:\temp\Sample.Install",
+    [String]$AdditionalArgs="",
+    [String]$Targets=""
+)
 echo "Running the install..."
 
 $msbuildExe = "$env:windir\Microsoft.NET\Framework\v4.0.30319\msbuild.exe"
@@ -7,4 +13,4 @@ if(!(Test-Path $msbuildExe))
     exit 1
 }
 
-&$msbuildExe $InstallDirectory\install.proj /target:"Dynamic" /filelogger /fileloggerparameters:"LogFile=$LogDirectory\install.log"
+&$msbuildExe C:\temp\Sample.Install\tools\install.proj /target:"Dynamic" /filelogger /fileloggerparameters:"LogFile=$LogDirectory\install.log"
