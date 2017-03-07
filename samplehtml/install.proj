@@ -13,10 +13,11 @@
     AssemblyFile="$(MSBuildProjectDirectory)\..\tools\MSBuild.ExtensionPack.dll" />
     
     <PropertyGroup>
-        <WebsiteName>Dynamic</WebsiteName>		
+        <WebsiteName>Default Web Site</WebsiteName>		
         <IISBin>$(windir)\system32\inetsrv</IISBin>
         <AppCmdExe>$(IISBin)\APPCMD.EXE</AppCmdExe>
         <PackageRootDirPath>$(MSBuildProjectDirectory)\..</PackageRootDirPath>
+	<TargetDirectory_Dynamic>D:\sample\</TargetDirectory_Dynamic>
     </PropertyGroup>
     
     <Target Name="All">
@@ -37,7 +38,7 @@
         
         <CallTarget Targets="PreInstall" />
 
-	<Copy SourceFiles="@(BinFiles)" OverwriteReadOnlyFiles="True" DestinationFolder="$(TargetDirectory_Dynamic)\" />
+	<Copy SourceFiles="C:\temp\Sample.Install.1.0.0\content\helloworld.html" OverwriteReadOnlyFiles="True" DestinationFolder="$(TargetDirectory_Dynamic)" />
         
         <!-- Create web app -->
         <MSBuild.ExtensionPack.Web.Iis7Website Name="$(WebsiteName)" TaskAction="AddVirtualDirectory" 
