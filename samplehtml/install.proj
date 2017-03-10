@@ -7,9 +7,7 @@
     AssemblyFile="$(MSBuildProjectDirectory)\MSBuild.ExtensionPack.dll" />
     <UsingTask TaskName="MSBuild.ExtensionPack.FileSystem.Folder" 
     AssemblyFile="$(MSBuildProjectDirectory)\MSBuild.ExtensionPack.dll" />
-    <UsingTask TaskName="NaviNet.MSBuild.Tasks.Couchbase.PushCouchbaseFiles" 
-    AssemblyFile="$(MSBuildProjectDirectory)\NaviNet.MSBuild.Tasks.dll" />
-	<UsingTask TaskName="MSBuild.ExtensionPack.Xml.XmlFile" 
+<UsingTask TaskName="MSBuild.ExtensionPack.Xml.XmlFile" 
     AssemblyFile="$(MSBuildProjectDirectory)\..\tools\MSBuild.ExtensionPack.dll" />
     
     <PropertyGroup>
