@@ -46,7 +46,6 @@
   <Target Name="RestoreBuildPackages">
     <Exec Command="$(NuGetExePath) install $(NuGetDirPath)\packages.config -configFile $(NuGetConfigPath) -ExcludeVersion" />
     <Exec Command="$(NuGetExePath) install $(ProjectRootPath)\ChefDemo\packages.config -configFile $(NuGetConfigPath)" />
+    <Exec Command="$(NuGetExePath) install $(ProjectRootPath)\ChefDemo.Tests\packages.config -configFile $(NuGetConfigPath)" />
   </Target>
-
-
 </Project>
