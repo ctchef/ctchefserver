@@ -11,7 +11,7 @@ namespace ChefDemo.Service
         {
             return new ChefDemo.Models.Index()
             {
-                FirstName = "Chef1",
+                FirstName = "Chef",
                 LastName = "Demo"
             };
         }
