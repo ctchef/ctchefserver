@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<package>
+    <metadata>
+        <id>ChefDemo.Install</id>
+        <title>ChefDemo Install</title>
+        <version>1.0</version>
+        <authors>emile</authors>
+        <owners>emile</owners>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>A Chef Demo</description>
+        <summary>A Chef Demo</summary>
+        <projectUrl>https://github.com/ctchef/ctchefserver.git</projectUrl>
+        <copyright>Copyright 2017 - CitiusTech.</copyright>
+        <dependencies/>
+    </metadata>
+    <files>
+        <!-- Installer files -->
+        <file src="install.ps1" target="tools"/>
+        <file src="install.proj" target="tools"/>
+        <file src="..\..\packages\MSBuild.Extension.Pack\tools\net40\MSBuild.ExtensionPack.Iis7.dll" target="tools"/>
+        <file src="..\..\packages\MSBuild.Extension.Pack\tools\net40\MSBuild.ExtensionPack.dll" target="tools"/>
+        <!--<file src="..\..\packages\MSBuild.Extension.Pack\lib\net40\Ionic.Zip.dll" target="tools"/>-->
+        <!-- required by the previous file -->
+        <!-- Content/distribution files -->
+        <file src="..\..\ChefDemo\bin\*.dll" target="content\bin"/>
+      <file src="..\..\ChefDemo\Views\**\*.*" target="content\views"/>
+    </files>
+</package>
