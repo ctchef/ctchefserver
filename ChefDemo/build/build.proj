@@ -14,6 +14,12 @@
     <CallTarget Targets="UnitTest"></CallTarget>
     <CallTarget Targets="PackInstaller"></CallTarget>
 	</Target>
+
+  <Target Name="CI" DependsOnTargets="RestoreBuildPackages">
+    <CallTarget Targets="Compile"></CallTarget>
+    <CallTarget Targets="PackInstaller"></CallTarget>
+  </Target>
+  
   <Target Name="Compile">
     <MSBuild Projects="$(ProjectRootPath)\ChefDemo.sln" />
   </Target>
