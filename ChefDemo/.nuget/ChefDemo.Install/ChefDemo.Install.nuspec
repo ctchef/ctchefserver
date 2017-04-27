@@ -24,5 +24,6 @@
         <!-- Content/distribution files -->
         <file src="..\..\ChefDemo\bin\*.dll" target="content\bin"/>
       <file src="..\..\ChefDemo\Views\**\*.*" target="content\views"/>
+      
     </files>
 </package>
