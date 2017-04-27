@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <UsingTask TaskName="MSBuild.Tasks.NUnit" AssemblyFile="$(MSBuildProjectDirectory)\..\packages\MSBuild.NUnit\tools\MSBuild.NUnit.dll" />
+  <PropertyGroup>
+    <ProjectRootPath>$(MSBuildProjectDirectory)\..</ProjectRootPath>
+    <NuGetDirPath>$(ProjectRootPath)\.nuget</NuGetDirPath>
+    <NuGetExePath>$(NuGetDirPath)\nuget.exe</NuGetExePath>
+    <NuGetConfigPath>$(NuGetDirPath)\nuget.config</NuGetConfigPath>
+    <DistDirPath>$(ProjectRootPath)\dist</DistDirPath>
+  </PropertyGroup>
+  
+	<Target Name="Build" DependsOnTargets="RestoreBuildPackages">
+    <CallTarget Targets="Compile"></CallTarget>
+    <CallTarget Targets="UnitTest"></CallTarget>
+    <CallTarget Targets="PackInstaller"></CallTarget>
+	</Target>
+  <Target Name="Compile">
+    <MSBuild Projects="$(ProjectRootPath)\ChefDemo.sln" />
+  </Target>
+  
+  <Target Name="UnitTest">
+    <ItemGroup>
+      <NUnitExePath Include="$(ProjectRootPath)\packages\NUnit.Runners\tools\nunit-console.exe" />
+      <TestAssemblies Include="$(ProjectRootPath)\**\bin\**\*Test*.dll" />
+    </ItemGroup>
+    <NUnit Assemblies="@(TestAssemblies)"
+           ToolPath="@(NUnitExePath->'%(relativedir)')"
+           DisableShadowCopy="true"
+           Force32Bit="false"
+           FrameworkToUse="net-4.0"
+           ContinueOnError="false" />
+  </Target>
+
+  <Target Name="PackInstaller" DependsOnTargets="CreateDistDir">
+    <PropertyGroup>
+      <InstallNuSpecPath>$(NuGetDirPath)\ChefDemo.Install\ChefDemo.Install.nuspec</InstallNuSpecPath>
+      <VersionArg Condition="$(Version) != ''">-version $(Version)</VersionArg>
+    </PropertyGroup>
+    <Exec Command="$(NuGetExePath) pack $(InstallNuSpecPath) -outputDirectory $(DistDirPath) $(VersionArg)" />
+  </Target>
+
+  <Target Name="CreateDistDir">
+    <MakeDir Directories="$(DistDirPath)" Condition="!Exists('$(DistDirPath)')" />
+  </Target>
+
+  <Target Name="RestoreBuildPackages">
+    <Exec Command="$(NuGetExePath) install $(NuGetDirPath)\packages.config -configFile $(NuGetConfigPath) -ExcludeVersion" />
+    <Exec Command="$(NuGetExePath) install $(ProjectRootPath)\ChefDemo\packages.config -configFile $(NuGetConfigPath)" />
+  </Target>
+
+
+</Project>
