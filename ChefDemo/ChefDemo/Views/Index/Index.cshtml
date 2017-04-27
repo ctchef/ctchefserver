@@ -6,11 +6,23 @@
 
 <h2>Index</h2>
 
-<table>
-    <tr>
-        <td>First Name</td>
-        <td>@Html.TextBoxFor(m=>m.FirstName)</td>
-        <td>Last Name</td>
-        <td>@Html.TextBoxFor(m=>m.LastName)</td>
-    </tr>
-</table>
+@using (Html.BeginForm("Index", "Index", HttpVerbs.Post))
+{ 
+    <table>
+        <tr>
+            <td>First Name</td>
+            <td>@Html.TextBoxFor(m => m.FirstName)</td>
+            <td>Last Name</td>
+            <td>@Html.TextBoxFor(m => m.LastName)</td>
+        </tr>
+        <tr>
+            <td>@Html.CheckBox("agree")</td>
+            <td>I Agree</td>
+        </tr>
+        <tr>
+            <td>
+                <input type="submit" value="Submit" /></td>
+        </tr>
+    </table>
+    
+}

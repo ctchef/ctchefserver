@@ -17,5 +17,12 @@ namespace ChefDemo.Controllers
             return View(model);
         }
 
+        [HttpPost]
+        public ActionResult Index(ChefDemo.Models.Index index)
+        {
+            ViewBag.Name = index.FirstName;
+            return View("Done");
+        }
+
     }
 }
