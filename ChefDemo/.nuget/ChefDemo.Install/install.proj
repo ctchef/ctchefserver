@@ -59,8 +59,6 @@
 
   <Target Name="ConfigureAppPool">
     <Message Text="Configuring $(DynamicAppPoolName)" />
-    <Error Condition="$(AppPoolIdentity) == ''" Code="1" Text="Target 'ChefDemo' requires variable AppPoolIdentity to be set." />
-    <Error Condition="$(AppPoolIdentityPassword) == ''" Code="1" Text="Target 'ChefDemo' requires variable AppPoolIdentityPassword to be set." />
     <MSBuild.ExtensionPack.Web.Iis7AppPool TaskAction="Modify" Name="$(DynamicAppPoolName)" ManagedRuntimeVersion="v4.0" Enable32BitAppOnWin64="false" IdleTimeout="0" RecycleInterval="0" />
     <MSBuild.ExtensionPack.Web.Iis7AppPool TaskAction="SetPipelineMode" Name="$(DynamicAppPoolName)" PipelineMode="Integrated" />
     <MSBuild.ExtensionPack.Web.Iis7AppPool TaskAction="SetIdentity" Name="$(DynamicAppPoolName)" IdentityType="SpecificUser" PoolIdentity="$(AppPoolIdentity)" IdentityPassword="$(AppPoolIdentityPassword)" />
