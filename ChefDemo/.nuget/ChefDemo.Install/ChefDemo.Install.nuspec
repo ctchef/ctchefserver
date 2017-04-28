@@ -19,7 +19,7 @@
         <file src="install.proj" target="tools"/>
         <file src="..\..\packages\MSBuild.Extension.Pack\tools\net40\MSBuild.ExtensionPack.Iis7.dll" target="tools"/>
         <file src="..\..\packages\MSBuild.Extension.Pack\tools\net40\MSBuild.ExtensionPack.dll" target="tools"/>
-        <file src="..\..\packages\MSBuild.Extension.Pack\lib\net40\Ionic.Zip.dll" target="tools"/>
+        <file src="..\..\packages\MSBuild.Extension.Pack\tools\net40\Ionic.Zip.dll" target="tools"/>
         <!-- required by the previous file -->
         <!-- Content/distribution files -->
         <file src="..\..\ChefDemo\bin\*.dll" target="content\bin"/>
