@@ -21,6 +21,18 @@
   </Target>
 
   <Target Name="Dynamic">
+
+    <ItemGroup>
+      <VirtualDirectory Include="/ctwebapps">
+        <ApplicationPath>/</ApplicationPath>
+        <PhysicalPath>$(SystemDrive)\inetpub\wwwroot\api</PhysicalPath>
+      </VirtualDirectory>
+      <Application Include="/ctwebapps/chefdemo">
+        <PhysicalPath>$(TargetDirectory_Dynamic)</PhysicalPath>
+        <AppPool>$(DynamicAppPoolName)</AppPool>
+      </Application>
+    </ItemGroup>
+    
     <Error Condition="$(TargetDirectory_Dynamic) == ''" Code="1" Text="Target 'Dynamic' requires variable TargetDirectory_Dynamic to be set." />
     <Error Condition="$(DynamicAppPoolName) == ''" Code="1" Text="Target 'Dynamic' requires variable DynamicAppPoolName to be set." />
 
@@ -28,7 +40,6 @@
     <CallTarget Targets="Clean" />
 
     <CallTarget Targets="CreateAppPools" />
-    <CallTarget Targets="ConfigureAppPool" />
 
     <Message Text="Copying files to '$(TargetDirectory_Dynamic)'" />
     <ItemGroup>
@@ -38,6 +49,14 @@
 
     <Copy SourceFiles="@(BinFiles)" OverwriteReadOnlyFiles="True" DestinationFolder="$(TargetDirectory_Dynamic)\Bin\%(BinFiles.RecursiveDir)" />
     <Copy SourceFiles="@(Views)" OverwriteReadOnlyFiles="True" DestinationFolder="$(TargetDirectory_Dynamic)\Views\%(Views.RecursiveDir)" />
+
+    <!-- Create web app -->
+    <MSBuild.ExtensionPack.Web.Iis7Website Name="$(WebsiteName)" TaskAction="AddVirtualDirectory"
+    VirtualDirectories="@(VirtualDirectory)" Force="true" />
+    <MSBuild.ExtensionPack.Web.Iis7Website Name="$(WebsiteName)" TaskAction="AddApplication"
+    Applications="@(Application)" Force="true" />
+
+    <CallTarget Targets="SetIisAppAutoStart" />
 
     <CallTarget Targets="PostInstall" />
   </Target>
@@ -57,21 +76,20 @@
     <MSBuild.ExtensionPack.Web.Iis7AppPool TaskAction="Create" Name="$(DynamicAppPoolName)" ManagedRuntimeVersion="v4.0" Condition="'$(DynamicAppPoolExists)' == 'False'" />
   </Target>
 
-  <Target Name="ConfigureAppPool">
-    <Message Text="Configuring $(DynamicAppPoolName)" />
-    <MSBuild.ExtensionPack.Web.Iis7AppPool TaskAction="Modify" Name="$(DynamicAppPoolName)" ManagedRuntimeVersion="v4.0" Enable32BitAppOnWin64="false" IdleTimeout="0" RecycleInterval="0" />
-    <MSBuild.ExtensionPack.Web.Iis7AppPool TaskAction="SetPipelineMode" Name="$(DynamicAppPoolName)" PipelineMode="Integrated" />
-    <MSBuild.ExtensionPack.Web.Iis7AppPool TaskAction="SetIdentity" Name="$(DynamicAppPoolName)" IdentityType="SpecificUser" PoolIdentity="$(AppPoolIdentity)" IdentityPassword="$(AppPoolIdentityPassword)" />
-
-    <Exec Command="$(AppCmdExe) set apppool &quot;$(DynamicAppPoolName)&quot; /-managedPipelineMode /-managedRuntimeVersion /-enable32BitAppOnWin64 /-processModel.idleTimeout /-failure.rapidFailProtection /-recycling.logEventOnRecycle /-recycling.periodicRestart.time /-recycling.periodicRestart.schedule" />
-    <Exec Command="$(AppCmdExe) set apppool &quot;$(DynamicAppPoolName)&quot; /managedPipelineMode:Integrated /managedRuntimeVersion:v4.0 /enable32BitAppOnWin64:False /processModel.idleTimeout:&quot;00:00:00&quot; /failure.rapidFailProtection:False /recycling.logEventOnRecycle:ConfigChange,IsapiUnhealthy,Memory,OnDemand,PrivateMemory,Requests,Schedule,Time /recycling.periodicRestart.time:&quot;00:00:00&quot; /+recycling.periodicRestart.schedule.[value='08:15:00']" />
-  </Target>
-
   <Target Name="PreInstall">
     <Exec Command="IISRESET /STOP" />
   </Target>
 
   <Target Name="PostInstall">
     <Exec Command="IISRESET /START" />
+  </Target>
+
+  <Target Name="SetIisAppAutoStart">
+    <PropertyGroup>
+      <AutoStart Condition="$(AutoStart) == ''">false</AutoStart>
+    </PropertyGroup>
+    <Exec Condition="$(AutoStart) == 'true'"
+    Command="$(AppCmdExe) set app /app.name:&quot;$(WebsiteName)/$(WebAppName)&quot; /preloadEnabled:true"
+    WorkingDirectory="$(IISBin)" />
   </Target>
 </Project>
