@@ -7,7 +7,7 @@
 
   <PropertyGroup>
     <DynamicAppPoolName Condition="$(DynamicAppPoolName) == ''">ChefDemoAppPool</DynamicAppPoolName>
-    <WebsiteName>Dynamic</WebsiteName>
+    <WebsiteName>Default Web Site</WebsiteName>
     <ChefDemoVDirName>chefdemo</ChefDemoVDirName>
     <ChefDemoDirPath>$(SystemDrive)\inetpub\wwwroot\chefdemo</ChefDemoDirPath>
     <ChefDemoAppDirPath>$(TargetDirectory_Dynamic)</ChefDemoAppDirPath>
@@ -32,7 +32,7 @@
         <AppPool>$(DynamicAppPoolName)</AppPool>
       </Application>
     </ItemGroup>
-    
+
     <Error Condition="$(TargetDirectory_Dynamic) == ''" Code="1" Text="Target 'Dynamic' requires variable TargetDirectory_Dynamic to be set." />
     <Error Condition="$(DynamicAppPoolName) == ''" Code="1" Text="Target 'Dynamic' requires variable DynamicAppPoolName to be set." />
 
@@ -45,6 +45,8 @@
     <ItemGroup>
       <BinFiles Include="$(PackageRootDirPath)\content\bin\**\*.*" />
       <Views Include="$(PackageRootDirPath)\content\views\**\*.*" />
+      <Global Include="$(PackageRootDirPath)\content\Global.asax" />
+      <WebConfig Include="$(PackageRootDirPath)\content\Web.config" />
     </ItemGroup>
 
     <Copy SourceFiles="@(BinFiles)" OverwriteReadOnlyFiles="True" DestinationFolder="$(TargetDirectory_Dynamic)\Bin\%(BinFiles.RecursiveDir)" />
