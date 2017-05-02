@@ -56,7 +56,7 @@
     <Copy SourceFiles="@(Scripts)" OverwriteReadOnlyFiles="True" DestinationFolder="$(TargetDirectory_Dynamic)\Scripts\%(Scripts.RecursiveDir)" />
     <Copy SourceFiles="@(Contents)" OverwriteReadOnlyFiles="True" DestinationFolder="$(TargetDirectory_Dynamic)\Content\%(Contents.RecursiveDir)" />
     <Copy SourceFiles="@(Global)" OverwriteReadOnlyFiles="True" DestinationFolder="$(TargetDirectory_Dynamic)\" />
-    <Copy SourceFiles="@(WebConfig)" OverwriteReadOnlyFiles="True" DestinationFolder="$(TargetDirectory_Dynamic)\ />
+    <Copy SourceFiles="@(WebConfig)" OverwriteReadOnlyFiles="True" DestinationFolder="$(TargetDirectory_Dynamic)\" />
 
     <!-- Create web app -->
     <MSBuild.ExtensionPack.Web.Iis7Website Name="$(WebsiteName)" TaskAction="AddVirtualDirectory"
