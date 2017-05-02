@@ -13,15 +13,14 @@
     <ChefDemoAppDirPath>$(TargetDirectory_Dynamic)</ChefDemoAppDirPath>
     <AppCmdExe>$(IISBin)\APPCMD.EXE</AppCmdExe>
     <PackageRootDirPath>$(MSBuildProjectDirectory)\..</PackageRootDirPath>
-
+    <WebConfigFilePath>$(PackageRootDirPath)\content\Web.config</WebConfigFilePath>
   </PropertyGroup>
 
   <Target Name="All">
     <CallTarget Targets="Dynamic" />
   </Target>
 
-  <Target Name="Dynamic">
-
+  <Target Name="Dynamic" DependsOnTargets="UpdateFilesWithEnvironmentValues">
     <ItemGroup>
       <VirtualDirectory Include="/ctwebapps">
         <ApplicationPath>/</ApplicationPath>
@@ -99,5 +98,11 @@
     <Exec Condition="$(AutoStart) == 'true'"
     Command="$(AppCmdExe) set app /app.name:&quot;$(WebsiteName)/$(WebAppName)&quot; /preloadEnabled:true"
     WorkingDirectory="$(IISBin)" />
+  </Target>
+
+  <Target Name="UpdateFilesWithEnvironmentValues">
+    <Error Condition="$(ChefValue) == ''" Code="1" Text="Variable 'ChefValue' is not set." />
+
+    <XmlPoke XmlInputPath="$(WebConfigFilePath)" Query="/configuration/appSettings/add[@key='ChefValue']/@value" Value="$(ChefValue)" />
   </Target>
 </Project>
