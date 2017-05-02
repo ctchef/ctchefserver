@@ -25,6 +25,8 @@
     <file src="..\..\ChefDemo\bin\*.dll" target="content\bin"/>
     <file src="..\..\ChefDemo\bin\*.pdb" target="content\bin"/>
     <file src="..\..\ChefDemo\Views\**\*.*" target="content\views"/>
+    <file src="..\..\ChefDemo\Scripts\**\*.*" target="content\scripts"/>
+    <file src="..\..\ChefDemo\Content\**\*.*" target="content\Content"/>
     <file src="..\..\ChefDemo\Global.asax" target="content"/>
     <file src="..\..\ChefDemo\Web.config" target="content"/>
 
