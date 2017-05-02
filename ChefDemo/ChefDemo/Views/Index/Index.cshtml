@@ -4,16 +4,27 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<h2>Index - @ViewBag.ChefValue </h2>
 
 @using (Html.BeginForm("Index", "Index", HttpVerbs.Post))
 { 
     <table>
         <tr>
             <td>First Name</td>
+
             <td>@Html.TextBoxFor(m => m.FirstName)</td>
             <td>Last Name</td>
             <td>@Html.TextBoxFor(m => m.LastName)</td>
+        </tr>
+
+        <tr>
+            <td>@Html.RadioButton("radio", "First") First</td>
+        </tr>
+        <tr>
+            <td>@Html.RadioButton("radio", "Secind") Second</td>
+        </tr>
+        <tr>
+            <td>@Html.RadioButton("radio", "Third") Third</td>
         </tr>
         <tr>
             <td>@Html.CheckBox("agree")</td>
