@@ -1,0 +1,95 @@
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="All">
+  <UsingTask TaskName="MSBuild.ExtensionPack.Web.Iis7Website" AssemblyFile="$(MSBuildProjectDirectory)\MSBuild.ExtensionPack.Iis7.dll" />
+  <UsingTask TaskName="MSBuild.ExtensionPack.Web.Iis7AppPool" AssemblyFile="$(MSBuildProjectDirectory)\MSBuild.ExtensionPack.Iis7.dll" />
+  <UsingTask TaskName="MSBuild.ExtensionPack.Web.Iis7Application" AssemblyFile="$(MSBuildProjectDirectory)\MSBuild.ExtensionPack.Iis7.dll" />
+  <UsingTask TaskName="MSBuild.ExtensionPack.FileSystem.File" AssemblyFile="$(MSBuildProjectDirectory)\MSBuild.ExtensionPack.dll" />
+  <UsingTask TaskName="MSBuild.ExtensionPack.FileSystem.Folder" AssemblyFile="$(MSBuildProjectDirectory)\MSBuild.ExtensionPack.dll" />
+
+  <PropertyGroup>
+    <DynamicAppPoolName Condition="$(DynamicAppPoolName) == ''">ChefDemoAppPool</DynamicAppPoolName>
+    <WebsiteName>Default Web Site</WebsiteName>
+    <ChefDemoVDirName>chefdemo</ChefDemoVDirName>
+    <ChefDemoDirPath>$(SystemDrive)\inetpub\wwwroot\chefdemo</ChefDemoDirPath>
+    <ChefDemoAppDirPath>$(TargetDirectory_Dynamic)</ChefDemoAppDirPath>
+    <AppCmdExe>$(IISBin)\APPCMD.EXE</AppCmdExe>
+    <PackageRootDirPath>$(MSBuildProjectDirectory)\..</PackageRootDirPath>
+
+  </PropertyGroup>
+
+  <Target Name="All">
+    <CallTarget Targets="Dynamic" />
+  </Target>
+
+  <Target Name="Dynamic">
+
+    <ItemGroup>
+      <VirtualDirectory Include="/ctwebapps">
+        <ApplicationPath>/</ApplicationPath>
+        <PhysicalPath>$(SystemDrive)\inetpub\wwwroot\api</PhysicalPath>
+      </VirtualDirectory>
+      <Application Include="/ctwebapps/chefdemo">
+        <PhysicalPath>$(TargetDirectory_Dynamic)</PhysicalPath>
+        <AppPool>$(DynamicAppPoolName)</AppPool>
+      </Application>
+    </ItemGroup>
+
+    <Error Condition="$(TargetDirectory_Dynamic) == ''" Code="1" Text="Target 'Dynamic' requires variable TargetDirectory_Dynamic to be set." />
+    <Error Condition="$(DynamicAppPoolName) == ''" Code="1" Text="Target 'Dynamic' requires variable DynamicAppPoolName to be set." />
+
+    <CallTarget Targets="PreInstall" />
+    <CallTarget Targets="Clean" />
+
+    <CallTarget Targets="CreateAppPools" />
+
+    <Message Text="Copying files to '$(TargetDirectory_Dynamic)'" />
+    <ItemGroup>
+      <BinFiles Include="$(PackageRootDirPath)\content\bin\**\*.*" />
+      <Views Include="$(PackageRootDirPath)\content\views\**\*.*" />
+    </ItemGroup>
+
+    <Copy SourceFiles="@(BinFiles)" OverwriteReadOnlyFiles="True" DestinationFolder="$(TargetDirectory_Dynamic)\Bin\%(BinFiles.RecursiveDir)" />
+    <Copy SourceFiles="@(Views)" OverwriteReadOnlyFiles="True" DestinationFolder="$(TargetDirectory_Dynamic)\Views\%(Views.RecursiveDir)" />
+
+    <!-- Create web app -->
+    <MSBuild.ExtensionPack.Web.Iis7Website Name="$(WebsiteName)" TaskAction="AddVirtualDirectory"
+    VirtualDirectories="@(VirtualDirectory)" Force="true" />
+    <MSBuild.ExtensionPack.Web.Iis7Website Name="$(WebsiteName)" TaskAction="AddApplication"
+    Applications="@(Application)" Force="true" />
+
+    <CallTarget Targets="SetIisAppAutoStart" />
+
+    <CallTarget Targets="PostInstall" />
+  </Target>
+
+  <Target Name="Clean">
+    <MSBuild.ExtensionPack.FileSystem.Folder TaskAction="RemoveContent" Path="$(TargetDirectory_Dynamic)" Condition="Exists($(TargetDirectory_Dynamic))" />
+  </Target>
+
+  <Target Name="CreateAppPools">
+    <!-- Check for app pools in IIS from previous install -->
+    <MSBuild.ExtensionPack.Web.Iis7AppPool TaskAction="CheckExists" Name="$(DynamicAppPoolName)">
+      <Output TaskParameter="Exists" PropertyName="DynamicAppPoolExists" />
+    </MSBuild.ExtensionPack.Web.Iis7AppPool>
+    <Message Text="Dynamic App Pool Exists: $(DynamicAppPoolExists)" />
+
+    <!-- Create app pools if they do not exist -->
+    <MSBuild.ExtensionPack.Web.Iis7AppPool TaskAction="Create" Name="$(DynamicAppPoolName)" ManagedRuntimeVersion="v4.0" Condition="'$(DynamicAppPoolExists)' == 'False'" />
+  </Target>
+
+  <Target Name="PreInstall">
+    <Exec Command="IISRESET /STOP" />
+  </Target>
+
+  <Target Name="PostInstall">
+    <Exec Command="IISRESET /START" />
+  </Target>
+
+  <Target Name="SetIisAppAutoStart">
+    <PropertyGroup>
+      <AutoStart Condition="$(AutoStart) == ''">false</AutoStart>
+    </PropertyGroup>
+    <Exec Condition="$(AutoStart) == 'true'"
+    Command="$(AppCmdExe) set app /app.name:&quot;$(WebsiteName)/$(WebAppName)&quot; /preloadEnabled:true"
+    WorkingDirectory="$(IISBin)" />
+  </Target>
+</Project>
