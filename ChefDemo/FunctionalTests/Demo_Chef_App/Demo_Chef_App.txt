@@ -6,6 +6,7 @@ Library           String
 *** Test Cases ***
 Validate_Web_Elements_and_Submit_On_Page
     Open Browser    http://10.30.52.40/ctwebapps/chefdemo/Index    browser=chrome
+    Capture Page Screenshot
     Page Should Contain Textfield    //*[@id='FirstName']
     Page Should Contain Textfield    //*[@id='LastName']
     Page Should Contain Radio Button    //*[@value='First']
