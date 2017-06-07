@@ -12,7 +12,7 @@ namespace ChefDemo.Service
             return new ChefDemo.Models.Index()
             {
                 FirstName = "Chef",
-                LastName = "Demo"
+                LastName = "Demo1"
             };
         }
     }
