@@ -18,5 +18,6 @@ Validate_Web_Elements_and_Submit_On_Page
     Click Button    //*[@value='Submit']
     Element Text Should Be    //*[.='Thanks Chef']    Thanks Chef
     Capture Page Screenshot
+    Close Browser	
 
 *** Keywords ***
