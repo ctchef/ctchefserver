@@ -5,8 +5,7 @@ Library           String
 
 *** Test Cases ***
 Validate_Web_Elements_and_Submit_On_Page
-    Comment    Open Browser    http://10.30.52.3/ctwebapps/chefdemo/Index    browser=chrome
-    Open Browser    http://Nvinet2008R2-MS/ctwebapps/chefdemo/Index    browser=chrome
+    Open Browser    http://localhost:62820/Index/    browser=chrome
     Capture Page Screenshot
     Page Should Contain Textfield    //*[@id='FirstName']
     Page Should Contain Textfield    //*[@id='LastName']
