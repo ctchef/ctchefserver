@@ -5,7 +5,7 @@ Library           String
 
 *** Test Cases ***
 Validate_Web_Elements_and_Submit_On_Page
-    Open Browser    http://localhost:62820/Index/    browser=chrome
+    Open Browser    http://nvinet2008r2-ms/ctwebapps/chefdemo/Index    browser=chrome
     Capture Page Screenshot
     Page Should Contain Textfield    //*[@id='FirstName']
     Page Should Contain Textfield    //*[@id='LastName']
@@ -17,6 +17,6 @@ Validate_Web_Elements_and_Submit_On_Page
     Click Button    //*[@value='Submit']
     Element Text Should Be    //*[.='Thanks Chef']    Thanks Chef
     Capture Page Screenshot
-    Close Browser	
+    Close Browser
 
 *** Keywords ***
